@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<main>
+    <header>
+        <h1>Mes Recettes !</h1>
+    </header>
+    <div class="banner"></div>
+    <section id="container">
+        <h2>Bienvenue sur le site Mes Recettes !</h2>
+        <p>Pour poster, rendez-vous sur la page d'inscription ! <a href="#">Inscription</a></p>
+    </section>
+</main>
+{% endblock %}

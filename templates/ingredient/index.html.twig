@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingrédients{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('asset/css/ingredients.css') }}">
+{% endblock %}
+{% block body %}
+    <main>
+        <h1>Mes ingrédients</h1>
+        <div class="count">
+           il y a {{ ingredients.getTotalItemCount }} ingrédients
+        </div>
+        {% for ingredient in ingredients %}
+            <div class="ingredients">
+                <table>
+                    <thead>
+                        <th>Numero</th>
+                        <th>image</th>
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Date de création</th>
+                    </thead>
+                    <tbody>
+                    {% for ingredient in ingredients %}
+                        <tr>
+                            <td>{{ ingredient.id }}</td>
+                            <td><img src="{{ asset('asset/upload/' ~ ingredient.images) }}" alt="{{ ingredient.name }}"></td>
+                            <td>{{ ingredient.name }}</td>
+                            <td>{{ ingredient.price }}</td>
+                            <td>{{ ingredient.createdAt|date('d/m/Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="navigation">
+                    {{ knp_pagination_render(ingredients) }}
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}
