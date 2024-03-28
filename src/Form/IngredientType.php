@@ -48,9 +48,9 @@ class IngredientType extends AbstractType
                 ]
             ])
             ->add('images', FileType::class, [
-                'label' => 'Image',
                 'mapped' => false,
                 'required' => false,
+                'label' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '2M', // Limite de poids à 2 méga-octets
@@ -67,7 +67,7 @@ class IngredientType extends AbstractType
                 'attr' => [
                     'class' => 'envoie'
                 ],
-                'label' => 'Créer mon ingrédient'
+                'label' => 'soumettre'
             ])
         ;
     }

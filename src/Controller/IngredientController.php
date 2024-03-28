@@ -6,6 +6,7 @@ use App\Entity\Ingredient;
 use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +30,7 @@ class IngredientController extends AbstractController
     public function index(IngredientRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $ingredients = $paginator->paginate(
-            $repository->findAll(),
+            $repository->findBy([], ['createdAt' => 'DESC']),
             $request->query->getInt('page', 1), 
             10 
         );
@@ -39,6 +40,14 @@ class IngredientController extends AbstractController
            
         ]);
     }
+    /**
+     * ajout d'ingredient
+     *
+     * @param Request $request
+     * @param SluggerInterface $slugger
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/ingredient/nouveau', 'ingredient.new', methods: ['GET', 'POST'])]
     public function new(Request $request,SluggerInterface $slugger, EntityManagerInterface $manager): Response
     {
@@ -72,14 +81,65 @@ class IngredientController extends AbstractController
                 $ingredient->setImages($newFilename);
             }
     
-
             $manager->persist($ingredient);
             $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'L\'ingrédient a été ajouté avec succès !'
+            );
+            
+            return $this->redirectToRoute('app_ingredient');
         }
        
 
         return $this->render('ingredient/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+    #[Route('/ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
+    public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(IngredientType::class, $ingredient);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $ingredient = $form->getData();
+
+            $manager->persist($ingredient);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Vôtre ingrédient a été modifié avec succes !'
+            );
+
+            return $this->redirectToRoute('app_ingredient');
+        }
+
+        return $this->render('ingredient/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    #[Route('/ingredient/supression/{id}', 'ingredient.delete', methods: ['GET'])]
+    public function delete(EntityManagerInterface $manager, Ingredient $ingredient): Response
+    {
+        if(!$ingredient){
+            $this->addFlash(
+                'success',
+                'L\'ingrédient n\'a pas été trouvé !'
+            );
+            return $this->redirectToRoute('app_ingredient');
+        }
+
+        $manager->remove($ingredient);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            'Vôtre ingrédient a été supprimé avec succès !'
+        );
+
+        return $this->redirectToRoute('app_ingredient');
     }
 }

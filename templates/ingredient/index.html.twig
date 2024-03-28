@@ -6,11 +6,20 @@
 {% endblock %}
 {% block body %}
     <main>
+    <header>
         <h1>Mes ingrédients</h1>
+    <header>
         <div class="count">
-           il y a {{ ingredients.getTotalItemCount }} ingrédients
+           il y a {{ ingredients.getTotalItemCount }} ingrédients 
         </div>
-        {% for ingredient in ingredients %}
+        <div class="ajout">
+         <a href="{{ path('ingredient.new') }}">ajouter un ingrédient</a>
+         </div>
+         {% for message in app.flashes('success') %}
+            <div class="flashes">
+                {{ message }}
+            </div>
+         {% endfor %}
             <div class="ingredients">
                 <table>
                     <thead>
@@ -19,6 +28,8 @@
                         <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de création</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
                     </thead>
                     <tbody>
                     {% for ingredient in ingredients %}
@@ -26,8 +37,10 @@
                             <td>{{ ingredient.id }}</td>
                             <td><img src="{{ asset('asset/upload/' ~ ingredient.images) }}" alt="{{ ingredient.name }}"></td>
                             <td>{{ ingredient.name }}</td>
-                            <td>{{ ingredient.price }}</td>
+                            <td>{{ ingredient.price }} €</td>
                             <td>{{ ingredient.createdAt|date('d/m/Y') }}</td>
+                            <td><a href="{{ path('ingredient.edit', { id: ingredient.id }) }}">modifier</a></td>
+                            <td><a href="{{ path('ingredient.delete', { id: ingredient.id }) }}">supprimer</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -36,6 +49,5 @@
                     {{ knp_pagination_render(ingredients) }}
                 </div>
             </div>
-        {% endfor %}
     </main>
 {% endblock %}

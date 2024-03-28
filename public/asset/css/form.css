@@ -1,0 +1,17 @@
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem; 
+}
+textarea{
+    width:100%;
+    border-radius:5px;
+    border:1px solid lightgrey;
+}
+.custom-checkbox-class {
+   display:inline-block;
+   width:30px;
+}
+.form-check-label {
+    background:blue;
+}
+
