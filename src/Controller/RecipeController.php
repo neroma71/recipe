@@ -8,6 +8,7 @@ use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,7 +28,7 @@ class RecipeController extends AbstractController
     {
 
         $recipes = $paginator->paginate(
-            $repository->findBy([], ['createdAt' => 'DESC']),
+            $repository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1), 
             10 
         );
@@ -54,6 +55,7 @@ class RecipeController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             $recipe = $form->getData();
+            $recipe->setUser($this->getUser());
 
             $manager->persist($recipe);
             $manager->flush();
@@ -71,8 +73,7 @@ class RecipeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/recette/edition/{id}', 'recipe.edit', methods: ['GET', 'POST'])]
-    /**
+     /**
      * This controller edit recipes
      *
      * @param Recipe $recipe
@@ -80,8 +81,15 @@ class RecipeController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
-    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $manager): Response
+    #[Route('/recette/edition/{id}', 'recipe.edit', methods: ['GET', 'POST'])]
+   
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $manager, Security $security): Response
     {
+
+        if (!$security->isGranted('ROLE_USER') || $recipe->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
@@ -104,7 +112,6 @@ class RecipeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    #[Route('/recette/supression/{id}', 'recipe.delete', methods: ['GET'])]
     /**
      * This controller delete recipes
      *
@@ -112,8 +119,15 @@ class RecipeController extends AbstractController
      * @param Recipe $recipe
      * @return Response
      */
-    public function delete(EntityManagerInterface $manger, Recipe $recipe):Response
+    #[Route('/recette/supression/{id}', 'recipe.delete', methods: ['GET'])]
+
+    public function delete(EntityManagerInterface $manger, Recipe $recipe, Security $security):Response
     {
+
+        if (!$security->isGranted('ROLE_USER') || $recipe->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $manger->remove($recipe);
         $manger->flush();
 

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,7 @@ class IngredientController extends AbstractController
     public function index(IngredientRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $ingredients = $paginator->paginate(
-            $repository->findBy([], ['createdAt' => 'DESC']),
+            $repository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1), 
             10 
         );
@@ -58,6 +59,7 @@ class IngredientController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $imageFile = $form->get('images')->getData();
+            $ingredient->setUser($this->getUser());
 
             // Vérifier si un fichier a été téléchargé
             if ($imageFile) {
@@ -97,9 +99,14 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
     #[Route('/ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
-    public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
+    public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager, Security $security): Response
     {
+        if (!$security->isGranted('ROLE_USER') || $ingredient->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(IngredientType::class, $ingredient);
         $form->handleRequest($request);
 
@@ -122,8 +129,12 @@ class IngredientController extends AbstractController
         ]);
     }
     #[Route('/ingredient/supression/{id}', 'ingredient.delete', methods: ['GET'])]
-    public function delete(EntityManagerInterface $manager, Ingredient $ingredient): Response
+    public function delete(EntityManagerInterface $manager, Ingredient $ingredient, Security $security): Response
     {
+        if (!$security->isGranted('ROLE_USER') || $ingredient->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         if(!$ingredient){
             $this->addFlash(
                 'success',
