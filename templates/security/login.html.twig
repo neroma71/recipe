@@ -26,9 +26,7 @@
     <label for="inputPassword" class="mt-4">Password</label>
     <input type="password" name="password" id="inputPassword" class="form-control mt-2" autocomplete="current-password" required>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     <button class="btn btn-lg btn-primary mt-4" type="submit">
         Sign in

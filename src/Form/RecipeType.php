@@ -6,7 +6,6 @@ use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use App\Repository\IngredientRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,7 +18,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Webmozart\Assert\Assert as AssertAssert;
 
 class RecipeType extends AbstractType
 {
@@ -29,27 +27,28 @@ class RecipeType extends AbstractType
     {
         $this->token = $token;
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('name', TextType::class, [
-            'attr' => [
-                'class' => 'form-control',
-                'minlenght' => '2',
-                'maxlength' => '255'
-            ],
-            'label' => 'Nom',
-            'label_attr' =>[
-                'class' => 'form-label'
-            ],
-            'constraints' => [
-                new Assert\Length(['min' => 2, 'max' => 255]),
-                new Assert\NotBlank()
-            ]
-        ])
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'minlength' => '2',
+                    'maxlength' => '255'
+                ],
+                'label' => 'Nom',
+                'label_attr' => [
+                    'class' => 'form-label'
+                ],
+                'constraints' => [
+                    new Assert\Length(['min' => 2, 'max' => 255]),
+                    new Assert\NotBlank()
+                ]
+            ])
             ->add('time', IntegerType::class, [
                 'attr' => [
-                    'class'> 'form-control',
+                    'class' => 'form-control',
                     'min' => 1,
                     'max' => 1440
                 ],
@@ -65,7 +64,7 @@ class RecipeType extends AbstractType
             ])
             ->add('nbPeople', IntegerType::class, [
                 'attr' => [
-                    'class'> 'form-control',
+                    'class' => 'form-control',
                     'min' => 1,
                     'max' => 50
                 ],
@@ -81,7 +80,7 @@ class RecipeType extends AbstractType
             ])
             ->add('difficulty', RangeType::class, [
                 'attr' => [
-                    'class'> 'form-range',
+                    'class' => 'form-range',
                     'min' => 1,
                     'max' => 5
                 ],
@@ -92,18 +91,18 @@ class RecipeType extends AbstractType
                 ],
                 'constraints' => [
                     new Assert\Positive(),
-                    new Assert\LessThan(5)
+                    new Assert\LessThan(6)
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
-                    'class'> 'form-control',
+                    'class' => 'form-control',
                     'min' => 1,
                     'max' => 2000
                 ],
                 'label' => 'Description',
                 'label_attr' => [
-                'class' => 'form-label mt-4'
+                    'class' => 'form-label mt-4'
                 ],
                 'constraints' => [
                     new Assert\NotBlank()
@@ -114,7 +113,7 @@ class RecipeType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'label' => 'Prix ',
-                'label_attr' =>[
+                'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
                 'constraints' => [
@@ -132,13 +131,23 @@ class RecipeType extends AbstractType
                     'class' => 'form-label mt-4'
                 ],
             ])
+            ->add('isPublic', CheckboxType::class, [
+                'attr' => [
+                    'class' => 'form-check',
+                ],
+                'required' => false,
+                'label' => 'Public ?',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ],
+            ])
             ->add('ingredients', EntityType::class, [
                 'class' => Ingredient::class,
                 'query_builder' => function (IngredientRepository $r){
                     return $r->createQueryBuilder('i')
-                    ->where('i.user = :user')
-                    ->orderBy('i.name', 'DESC')
-                    ->setParameter('user', $this->token->getToken()->getUser());
+                        ->where('i.user = :user')
+                        ->orderBy('i.name', 'DESC')
+                        ->setParameter('user', $this->token->getToken()->getUser());
                 },
                 'multiple' => true,
                 'expanded' => true,

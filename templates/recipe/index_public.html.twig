@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recettes{% endblock %}
+
+{% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('asset/css/ingredients.css') }}">
+{% endblock %}
+
+{% block body %}
+<main>
+    <header>
+        <nav>
+            <ul>
+                <li><a class="nav-link" href="{{ path('app_ingredient') }}">Mes ingrédients</a></li>
+                <li><a class="nav-link" href="{{ path('app_recipe') }}">Mes recettes</a></li>
+                <li><a href="{{ path('app_user', { 'id': app.user.id }) }}">Modifier le profil</a></li>
+                <li><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
+            </ul>
+        </nav>
+        <h1>Mes recettes</h1>
+    </header>
+    
+    <div class="count">
+        Il y a {{ recipes.getTotalItemCount }} recettes
+    </div>
+    
+    <div class="ajout">
+        <a href="{{ path('recipe.new') }}">Ajouter une recette</a>
+    </div>
+    
+    {% for message in app.flashes('success') %}
+        <div class="flashes">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <div class="recettes">
+        <div class="card-container">
+            {% for recipe in recipes %}
+             <a href="{{ path('recipe_show', { id: recipe.id }) }}">
+                <div class="card">
+                    <h3>
+                            {{ recipe.name }}
+                    </h3>
+                    <p>Prix : 
+                        {% if recipe.price is null %}
+                            Non renseigné
+                        {% else %}
+                            {{ recipe.price }} €
+                        {% endif %}
+                    </p>
+                    <p>Difficulté : 
+                        {% if recipe.difficulty is null %}
+                            Non renseigné
+                        {% else %}
+                            {{ recipe.difficulty }}
+                        {% endif %}
+                    </p>
+                    <p>Date de création : {{ recipe.createdAt|date('d/m/Y') }}</p>
+                </div>
+                 </a>
+            {% endfor %}
+        </div>
+        
+        <div class="navigation">
+            {{ knp_pagination_render(recipes) }}
+        </div>
+    </div>
+</main>
+{% endblock %}

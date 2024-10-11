@@ -8,7 +8,17 @@
 
 {% block body %}
     <div class="container">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ path('app_ingredient') }}">Mes ingrédients</a></li>
+                <li><a  href="{{ path('app_recipe') }}">Mes recettes</a></li>
+                <li><a href="{{ path('app_user', { 'id': app.user.id }) }}">Modifier le profil</a></li>
+                <li><a  href="{{ path('app_logout') }}">Déconnexion</a></li>
+            </ul>
+        </nav>
         <h2>Modifier la recette</h2>
+    </header>
     {{ form_start(form) }}
         <div class="col">
             {{ form_row(form.name) }}

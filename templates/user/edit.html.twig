@@ -13,12 +13,12 @@
         <h1> 
             formulaire de modification du profil
         </h1>
-        {% for message in app.flashes('warning') %}
-        <div class="alert alert-warning mt-4">
-        {{ message }}
+            {% for message in app.flashes('warning') %}
+                <div class="alert alert-warning mt-4">
+                {{ message }}
         </div>
-        {% endfor %}
-        {{ form(form) }}
-    </div>
+            {% endfor %}
+            {{ form(form) }}
+        </div>
 
 {% endblock %}

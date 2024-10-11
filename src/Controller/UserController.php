@@ -51,7 +51,7 @@ class UserController extends AbstractController
             // Rediriger l'utilisateur vers une autre page après la modification
             $this->addFlash(
                 'success',
-                'Les informations ont été modifiés avec succès'
+                'Les informations de vôtre compte ont été modifiés avec succès'
             );
             return $this->redirectToRoute('app_recipe');
         }

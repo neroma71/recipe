@@ -40,6 +40,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
+          - { path: ^/recette/\d+$, roles: PUBLIC_ACCESS }
           - { path: ^/ingredient, roles: ROLE_USER }
           - { path: ^/recette, roles: ROLE_USER }
 
