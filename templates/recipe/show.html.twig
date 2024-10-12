@@ -47,8 +47,8 @@
              {% endfor %}
          </div>
           <div>
-            <h3>Description :</h3>
-           <p class="description">{{ recipe.description|raw }}</p>
+            <h3>Préparation :</h3>
+           <p class="description">{{ recipe.description|nl2br}}</p>
         </div>
     </div>
 {% endblock %}

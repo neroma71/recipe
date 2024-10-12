@@ -97,3 +97,6 @@ a{
     background:var(--subtitle-color);
     border-radius:5px 5px 0 0;
 }
+.description{
+    background:lime;
+}

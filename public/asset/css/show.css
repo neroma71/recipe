@@ -61,6 +61,7 @@ p{
     padding:5px;
     box-sizing: content-box;
     border:1px solid lightgray;
+    border-radius:5px;
 }
 .ingredients img{
     height:100px;
