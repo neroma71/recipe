@@ -8,6 +8,7 @@ use App\Repository\IngredientRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
@@ -154,6 +155,25 @@ class RecipeType extends AbstractType
                 'choice_attr' => function($choice, $key, $value) {
                     return ['class' => 'custom-checkbox-class'];
                 },
+            ])
+            ->add('images', FileType::class, [
+                'label' => 'Image (JPEG, PNG)', // Étiquette du champ d'upload d'image
+                'mapped' => false, // Ne pas lier ce champ à une propriété de l'entité Recipe
+                'constraints' => [
+                    new Assert\File([
+                        'maxSize' => '2M', // Taille maximale de 2 Mo
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image au format JPEG, PNG ou GIF.',
+                    ]),
+                ],
+                'required' => false, // Rendre ce champ optionnel
+                'attr' => [
+                    'class' => 'form-control mt-4',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

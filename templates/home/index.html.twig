@@ -8,19 +8,38 @@
 {% block body %}
 <main>
     <header>
+    <button id="connexion">
+     <a class="nav-link" href="{{ path('app_recipe') }}">Connexion</a>
+    </button>
     <nav>
         <ul>
-            <li><a class="nav-link" href="{{ path('app_login') }}">Mon compte</a></li>
+            <li><a class="nav-link" href="{{ path('app_public_post') }}">Tous les articles</a></li>
+            <li><a class="nav-link" href="{{ path('recipe.index.publique') }}">Toutes les recettes</a></li>
+            <li><a class="nav-link" href="{{ path('app_register')}}">Inscription</a></li>
         </ul>
     </nav>
-        <h1>Mes Recettes !</h1>
+        <h1>LA CUISINE ET VOUS </h1>
     </header>
     <div class="banner"></div>
     <section id="container">
-        <h2>Bienvenue sur le site Mes Recettes !</h2>
+        <h2>Bienvenue sur le site LA CUISINE ET VOUS !</h2>
         <p>Pour poster, rendez-vous sur la page d'inscription ! <a href="{{ path('app_register') }}">Inscription</a></p>
-    </section>
-     <div class="card-container">
+        <h2 id="subtitle">Les derniers articles</h2>
+        <div class="card-container">
+                {% for post in latestPosts %}
+                <a href="{{ path('app_public_post_show', { id: post.id }) }}">
+                <div class="card">
+                    <h3>
+                        {{ post.title }}
+                    </h3>
+                        <p>Date de création : {{ post.date|date('d/m/Y') }}</p>
+                     {% if post.image %}<img src="{{ asset('asset/upload/' ~ post.image) }}" alt="Image de l'article" class="postimg">{% endif %}
+                </div>
+                </a>
+                {% endfor %}
+        <div>
+            <h2 id="subtitle">Les recettes du moment</h2>
+            <div class="card-container">
             {% for recipe in recipes %}
              <a href="{{ path('recipe_show', { id: recipe.id }) }}">
                 <div class="card">
@@ -42,9 +61,12 @@
                         {% endif %}
                     </p>
                     <p>Date de création : {{ recipe.createdAt|date('d/m/Y') }}</p>
+                     <img src="{{ asset('asset/upload/' ~ recipe.images) }}" alt="{{ recipe.name }}" class="img-fluid">
                 </div>
                  </a>
             {% endfor %}
         </div>
+    </section>
 </main>
+<script src="{{ asset('asset/js/home.js') }}"></script>
 {% endblock %}

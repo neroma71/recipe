@@ -1,0 +1,102 @@
+*{
+    font-family:Helvetica, sans-serif;
+}
+:root{
+    --subtitle-color:salmon;
+    --text-color:grey;
+}
+body{
+    margin:0;
+    padding:0;
+    background:rgb(244, 244, 244);
+    overflow-x:hidden;
+}
+header{
+    position:fixed;
+    height:150px;
+    width:100vw;
+    top:0;
+    left:0;
+    background:url(../images/accueil.jpg)fixed no-repeat;
+    background-size:cover;
+    z-index:10;
+}
+h1{
+    color:white;
+}
+.articles{
+    width:70%;
+    margin:200px 15%;
+    padding:20px;
+    box-sizing:border-box;
+    background:white;
+    border-radius:5px;
+}
+a{
+    text-decoration:none;
+}
+.card{
+    position:relative;
+    width:90%;
+    height:200px;
+    margin-left:5%;
+    margin-top:10px;
+    border:1px solid salmon;
+    border-radius:5px;
+}
+.text{
+    position:absolute;
+    height:90%;
+    width:97%;
+    top:5%;
+    left:1.5%;
+    background:rgba(0, 0, 0, 0.3);
+    border-radius:5px;
+    z-index:5;
+}
+.card p{
+    position:relative;
+    width:100%;
+    text-align:center;
+    color:white;
+}
+.card img{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+.navigation{
+    width:100%;
+    height:40px;
+    margin-top:10px;
+}
+.navigation ul{
+    display:flex;
+    justify-content: center;
+}
+.page-link{
+    color:grey;
+    transition:none;
+}
+.page-link:focus{
+    box-shadow:0 0 0 0;
+}
+.page-link:hover{
+    background:var(--subtitle-color);
+    color:white;
+}
+.active > .page-link, .page-link.active{
+    background:var(--subtitle-color);
+    border-color:lightgray;
+}
+.disabled > .page-link, .page-link.disabled{
+    background:var(--subtitle-color);
+}
+footer{
+    width:100vw;
+    height:100px;
+    background:black;
+}

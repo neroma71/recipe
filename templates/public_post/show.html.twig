@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block stylesheets %}
+       <link rel="stylesheet" href="{{ asset('asset/css/post.css') }}">
+{% endblock %}
+
+{% block body %}
+<header class="recipe-header" style="background-image: url('{{ asset('asset/upload/' ~ post.image) }}');">
+<button id="connexion">
+     <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+</button>
+   <nav>
+        <ul>
+            <li><a class="nav-link" href="{{ path('app_home') }}">Accueil</a></li>
+            <li><a class="nav-link" href="{{ path('app_public_post') }}">Tous les articles</a></li>
+        </ul>
+    </nav>
+    <h1>{{ post.title }}</h1>
+</header>
+   <div class="banner">
+        <p class="auteur">Auteur : {{ post.user.pseudo }}</p>
+    </div>
+<div class="container">
+    <div class="content">
+     <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+      {% if post.image %}<img src="{{ asset('asset/upload/' ~ post.image) }}" alt="Image de l'article">{% endif %}
+    </div>
+</div>
+<footer>
+    <p>©</p>
+</footer>
+{% endblock %}

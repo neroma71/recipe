@@ -6,11 +6,23 @@
 {% endblock %}
 
 {% block body %}
-    <header>
+   <header class="recipe-header" style="background-image: url('{{ asset('asset/upload/' ~ recipe.images) }}');">
+   <nav>
+        <ul>
+            <li><a class="nav-link" href="{{ path('app_home') }}">Accueil</a></li>
+            <li><a class="nav-link" href="{{ path('app_login') }}">Mon compte</a></li>
+            <li><a class="nav-link" href="{{ path('app_recipe') }}">Mes recettes</a></li>
+            <li><a class="nav-link" href="{{ path('app_ingredient') }}">Mes ingrédients</a></li>
+        </ul>
+    </nav>
         <h1>{{ recipe.name }}</h1>
     </header>
-    <div class="banner"></div>
+    <div class="banner">
+        <p class="auteur">La recette de : {{ recipe.user.pseudo }}</p>
+    </div>
     <div class="container">
+    <h2>{{ recipe.name }}</h2>
+    <img src="{{ asset('asset/upload/' ~ recipe.images) }}" alt="Image de {{ recipe.name }}" class="img-fluid">
         <h3>Infos pratiques :</h3>
             <p>Date de création : {{recipe.createdAt|date('d/m/Y')}}</p>
             {% if recipe.time %}
@@ -24,7 +36,7 @@
                Nombre de personne non renseigné !
                 {% endif %}
             {% if recipe.difficulty %}
-            <p>Difficulté : {{ recipe.difficulty }}</p>
+            <p>Difficulté : {{ recipe.difficulty }} / 6</p>
                 {% else %}
                Difficulté non renseignée !
              {% endif %}
@@ -42,7 +54,7 @@
                 {% for ingredient in recipe.ingredients %}
                 <div class="produits">
                     <img src="{{ asset('asset/upload/' ~ ingredient.images) }}" alt="{{ ingredient.name }}">
-                    <p> {{ ingredient.name }}</p>
+                    <p> {{ ingredient.name }} {{ingredient.price}}€ / kg</p>
                 </div>
              {% endfor %}
          </div>
@@ -51,4 +63,5 @@
            <p class="description">{{ recipe.description|nl2br}}</p>
         </div>
     </div>
+    <footer></footer>
 {% endblock %}

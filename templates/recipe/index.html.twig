@@ -9,8 +9,10 @@
     <header>
         <nav>
             <ul>
+                <li><a class="nav-link" href="{{ path('app_home') }}">Accueil</a></li>
                 <li><a class="nav-link" href="{{ path('app_ingredient') }}">Mes ingrédients</a></li>
                 <li><a class="nav-link" href="{{ path('app_recipe') }}">Mes recettes</a></li>
+                <li><a class="nav-link" href="{{ path('app_post_index') }}">Mes articles</a></li>
                 <li><a href="{{ path('app_user', { 'id': app.user.id }) }}">Modifier le profil</a></li>
                 <li><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
             </ul>
@@ -32,6 +34,7 @@
                 <table>
                     <thead>
                         <th>Numero</th>
+                        <th>Image</th>
                         <th>Nom</th>
                         <th>Prix</th>
                         <th>Difficulté</th>
@@ -43,6 +46,7 @@
                     {% for recipe in recipes %}
                         <tr>
                             <td>{{ recipe.id }}</td>
+                             <td><img src="{{ asset('asset/upload/' ~ recipe.images) }}"></td>
                             <td>{{ recipe.name }}</td>
                             <td>
                                 {% if recipe.price is null %}

@@ -71,6 +71,9 @@ class Recipe
     #[Assert\NotNull()]
     private ?bool $isPublic = null;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $images = null;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
@@ -241,6 +244,18 @@ class Recipe
     public function setIsPublic(bool $isPublic): static
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    public function getImages(): ?string
+    {
+        return $this->images;
+    }
+
+    public function setImages(?string $images): static
+    {
+        $this->images = $images;
 
         return $this;
     }

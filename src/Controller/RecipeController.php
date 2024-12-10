@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,6 +43,26 @@ class RecipeController extends AbstractController
             $recipe = $form->getData();
             $recipe->setUser($this->getUser());
 
+            // Gestion de l'upload d'image
+            $imageFile = $form->get('images')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+
+                // Déplacez le fichier vers le dossier public/upload
+                try {
+                    $imageFile->move(
+                        $this->getParameter('kernel.project_dir') . '/public/asset/upload',
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le déplacement du fichier échoue
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+
+                // Mettez à jour la propriété 'images' de l'entité Recipe avec le nom du fichier
+                $recipe->setImages($newFilename);
+            }
+
             $manager->persist($recipe);
             $manager->flush();
 
@@ -71,6 +92,26 @@ class RecipeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $recipe = $form->getData();
             
+            // Gestion de l'upload d'image
+            $imageFile = $form->get('images')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+
+                // Déplacez le fichier vers le dossier public/upload
+                try {
+                    $imageFile->move(
+                        $this->getParameter('kernel.project_dir') . '/public/asset/upload',
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le déplacement du fichier échoue
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+
+                // Mettez à jour la propriété 'images' de l'entité Recipe avec le nom du fichier
+                $recipe->setImages($newFilename);
+            }
+
             $manager->persist($recipe);
             $manager->flush();
 
@@ -86,7 +127,6 @@ class RecipeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
     #[Route('/recette/supression/{id}', 'recipe.delete', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function delete(EntityManagerInterface $manager, Recipe $recipe, Security $security): Response

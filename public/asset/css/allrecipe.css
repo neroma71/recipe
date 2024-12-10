@@ -10,7 +10,6 @@ body{
     width:100vw;
     margin:0;
     padding:0;
-    background:white;
     overflow-x: hidden;
 }
 main{
@@ -18,7 +17,7 @@ main{
     padding:0;
     min-height:100vh;
     width:100vw;
-    background:white;
+    background:rgb(244, 244, 244);
 }
 header{
     position:fixed;
@@ -29,7 +28,6 @@ header{
     background:url(../images/accueil.jpg)top center fixed no-repeat;
     background-size:cover;
     z-index:100;
-    transition:all 0.3s linear;
 }
 #connexion{
     position:fixed;
@@ -45,24 +43,14 @@ header{
 #connexion a{
     color:white;
 }
-.myhead{
-    position:fixed;
-    height:150px;
-    width:100vw;
-    top:0;
-    left:0;
-    background:url(../images/accueil.jpg)top center fixed no-repeat;
-    background-size:cover;
-    z-index:100;
-}
-nav{
+header nav{
     position:fixed;
     height:40px;
     width:100%;
     top:0;
     background:rgba(0,0,0,0.5);
 }
-nav ul{
+header nav ul{
     position:fixed;
     height:40px;
     width:100%;
@@ -72,12 +60,12 @@ nav ul{
     display:flex;
     justify-content:center;
 }
-nav ul li{
+header nav ul li{
     width:150px;
     height:40px;
     text-align:center;
 }
-nav ul li a{
+header nav ul li a{
     display:block;
     width:150px;
     height:40px;
@@ -85,7 +73,7 @@ nav ul li a{
     text-align:center;
     color:white;
 }
-nav ul li a:hover{
+header nav ul li a:hover{
     display:block;
     line-height:40px;
     color:white;
@@ -106,21 +94,24 @@ h1{
     height:50px;
     top:250px;
     background:rgb(30, 30, 30);
-    transition:all 0.3s linear;
     z-index:10;
+}
+.banner p{
+    color:white;
 }
 #container{
     position:relative;
+    width:80%;
+    left:10%;
     top:300px;
+    background:white;
 }
-h2{
+#subtitle{
     position:relative;
     top:20px;
     text-align:center;
     color:var(--subtitle-color);
-}
-#subtitle{
-    margin-top:70px;
+    margin:70px 0 70px;
 }
 p{
     position:relative;
@@ -133,7 +124,7 @@ a{
     text-decoration:none;
 }
 .card-container{
-    width:100vw;
+    width:100%;
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -157,16 +148,15 @@ a{
     width:100%;
     height:50px;
     left:0;
-    top:-17px;
+    top:-10px;
     font-size:15px;
-    padding-top:10px;
+    padding-top:15px;
     color:white;
     background:var(--subtitle-color);
-
 }
 .card p{
     position:relative;
-    top:50px;
+    top:60px;
     line-height:5px;
 }
 .img-fluid{
@@ -184,4 +174,34 @@ a{
     object-fit:cover;
     left:0;
     top:120px;
+}
+.navigation{
+    width:100%;
+    height:40px;
+    margin-top:10px;
+}
+.navigation nav{
+  
+}
+.navigation ul{
+    display:flex;
+    justify-content: center;
+}
+.page-link{
+    color:grey;
+    transition:none;
+}
+.page-link:focus{
+    box-shadow:0 0 0 0;
+}
+.page-link:hover{
+    background:var(--subtitle-color);
+    color:white;
+}
+.active > .page-link, .page-link.active{
+    background:var(--subtitle-color);
+    border-color:lightgray;
+}
+.disabled > .page-link, .page-link.disabled{
+    background:var(--subtitle-color);
 }
